@@ -1,6 +1,9 @@
 node_modules/
 dist/
-# Snippet storage (the app's DATA_DIR) - never commit user snippets
+# Snippet storage (the app's DATA_DIR) - never commit user snippets.
+# snippets-data/ is where the app keeps them; only its README is tracked.
+snippets-data/*
+!snippets-data/README.md
 data/
 **/data/snippets/
 .DS_Store

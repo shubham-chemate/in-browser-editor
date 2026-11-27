@@ -33,6 +33,11 @@ Open **http://code-editor.localhost**. In Chrome, after the first visit, typing 
 
 It's only reachable from your own machine. Stop it with `docker compose down`; your snippets are kept.
 
+**Where your snippets live:**
+- They're stored in [`snippets-data/`](snippets-data/) in this folder, one JSON file per snippet.
+- The app manages these files, so edit snippets in the app, not by hand.
+- They're git-ignored and never pushed. Copy the folder to back them up.
+
 ## Handy shortcuts
 
 | | |

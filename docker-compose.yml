@@ -10,7 +10,8 @@ services:
       - "127.0.0.1:80:8080" # → http://code-editor.localhost (Chrome maps *.localhost to this machine)
       - "127.0.0.1:8080:8080" # → http://localhost:8080 (still works)
     volumes:
-      - snippets-data:/data # your snippets live here and survive rebuilds
+      # Your snippets live in ./snippets-data (managed by the app; see its README).
+      - ./snippets-data:/data
     restart: unless-stopped
 
   # Optional live-reload frontend for working on the editor itself:
@@ -32,5 +33,4 @@ services:
       - editor
 
 volumes:
-  snippets-data:
   web-node-modules:
