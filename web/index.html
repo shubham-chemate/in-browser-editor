@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snippet Editor</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23005fb8'/%3E%3Cpath d='M12 10l-6 6 6 6M20 10l6 6-6 6' stroke='white' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+    <script>
+      // Set the theme before first paint to avoid a flash.
+      try {
+        var t = localStorage.getItem("snippet-editor:theme");
+        if (t !== "light" && t !== "dark") t = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.dataset.theme = t;
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <!-- Each region is mounted by its component (src/ui/*.ts). -->
+    <div class="app">
+      <aside id="sidebar-root" aria-label="Snippets"></aside>
+      <main id="main-root">
+        <header id="titlebar-root"></header>
+        <div id="banner" class="banner" role="alert" hidden></div>
+        <div id="editor" class="editor"></div>
+        <div id="empty-editor" class="empty-editor" hidden>
+          <div class="empty-editor-inner">
+            <p class="empty-editor-title">No snippet open</p>
+            <p class="empty-editor-text">Pick one from the sidebar, or start a new one.</p>
+            <div class="empty-editor-actions">
+              <button id="empty-new" type="button" class="btn btn-primary" data-testid="empty-new">New snippet</button>
+              <button id="empty-search" type="button" class="btn">Find a snippet</button>
+            </div>
+          </div>
+        </div>
+      </main>
+      <footer id="statusbar-root"></footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

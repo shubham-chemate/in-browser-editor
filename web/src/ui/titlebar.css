@@ -1,0 +1,93 @@
+/* Top row (36px): sidebar toggle, tab strip, language pill, actions.
+   See docs/ui-plan.md §4.2. Tokens only. */
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  flex: none;
+  gap: 0;
+  height: var(--titlebar-h);
+  padding: 0 var(--sp-2) 0 var(--sp-1);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  font-size: var(--fs-13);
+  user-select: none;
+}
+
+.titlebar .icon-btn { flex: none; transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+.titlebar [data-testid="more-menu"][aria-expanded="true"] { background: var(--hover); color: var(--text); }
+
+/* ---- left: sidebar toggle ---------------------------------------------------- */
+.titlebar .tb-left {
+  display: flex;
+  align-items: center;
+  flex: none;
+  height: 100%;
+  padding-right: var(--sp-1);
+}
+
+/* ---- middle: tab strip (ui/tabs.ts) --------------------------------------------- */
+.titlebar .tb-tabs {
+  flex: 1 1 auto;
+  align-self: flex-start; /* tabs hang from the top so the active one can cover the bottom border */
+  min-width: 0;
+  height: var(--titlebar-h);
+  border-left: 1px solid var(--border);
+}
+
+/* ---- right ----------------------------------------------------------------- */
+.titlebar .tb-right {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex: none;
+  padding-left: var(--sp-2);
+}
+
+.titlebar .tb-lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 28px;
+  padding: 0 6px 0 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-13);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.titlebar .tb-lang:hover,
+.titlebar .tb-lang[aria-expanded="true"] { background: var(--hover); border-color: var(--border-strong); }
+.titlebar .tb-lang:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.titlebar .tb-lang-badge { display: flex; }
+.titlebar .tb-lang-name { line-height: 1; }
+.titlebar .tb-lang-chev {
+  display: grid;
+  place-items: center;
+  margin-left: -2px;
+  color: var(--text-faint);
+  transition: transform var(--dur) var(--ease);
+}
+.titlebar .tb-lang[aria-expanded="true"] .tb-lang-chev { transform: rotate(180deg); }
+
+.titlebar .tb-divider {
+  flex: none;
+  width: 1px;
+  height: 16px;
+  margin: 0 var(--sp-1);
+  background: var(--border);
+}
+
+/* ---- narrow ---------------------------------------------------------------- */
+@media (max-width: 720px) {
+  .titlebar { padding: 0 6px 0 2px; }
+  .titlebar .tb-copy,
+  .titlebar .tb-divider,
+  .titlebar .tb-lang-name { display: none; }
+  .titlebar .tb-right { gap: 2px; }
+  .titlebar .tb-lang { gap: 4px; margin-right: 2px; }
+}

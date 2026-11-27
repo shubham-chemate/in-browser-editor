@@ -1,0 +1,36 @@
+services:
+  # The app: http://localhost:8080
+  editor:
+    build:
+      context: .
+      target: runtime
+    image: snippet-editor:latest
+    ports:
+      # Only reachable from this machine.
+      - "127.0.0.1:80:8080" # → http://code-editor.localhost (Chrome maps *.localhost to this machine)
+      - "127.0.0.1:8080:8080" # → http://localhost:8080 (still works)
+    volumes:
+      - snippets-data:/data # your snippets live here and survive rebuilds
+    restart: unless-stopped
+
+  # Optional live-reload frontend for working on the editor itself:
+  #   docker compose --profile dev up
+  # then open http://localhost:5173 (API calls go to the editor service).
+  web-dev:
+    profiles: ["dev"]
+    image: node:22-alpine
+    working_dir: /app
+    command: sh -c "npm ci --no-audit --no-fund && npm run dev -- --host 0.0.0.0"
+    environment:
+      API_TARGET: http://editor:8080
+    volumes:
+      - ./web:/app
+      - web-node-modules:/app/node_modules # keeps node_modules inside Docker
+    ports:
+      - "127.0.0.1:5173:5173"
+    depends_on:
+      - editor
+
+volumes:
+  snippets-data:
+  web-node-modules:

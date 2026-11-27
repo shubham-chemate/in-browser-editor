@@ -1,0 +1,234 @@
+/* Design tokens: the single source of colors, type, spacing, motion.
+   Owned by the design-system agent; others use these names, never raw colors.
+   See docs/ui-plan.md §4.4.
+
+   Palettes: dark is modelled on VS Code Dark Modern / Cursor (near-neutral
+   greys, one blue accent), light on VS Code Light Modern. Contrast (WCAG):
+   --text-muted >= 4.5:1 and --text-faint >= 3:1 on --surface-1 and
+   --editor-bg; every --syn-* color >= 4.5:1 on --editor-bg.
+
+   Layering (dark): surface-0 (app) < surface-1 (sidebar/bars) < editor-bg
+   < surface-2 (popovers). The editor sits one step lighter than the chrome,
+   like VS Code, so the code reads as the brightest, calmest plane. */
+
+:root {
+  /* ---- type ---- */
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-code: 15px;      /* editor text; 15px x 1.6 = a crisp 24px line box */
+  --lh-code: 1.6;
+  --lh-tight: 1.25;
+  --lh-ui: 1.45;
+
+  /* ---- spacing (4px grid, plus the 2/6px half steps) ---- */
+  --sp-0-5: 2px;
+  --sp-1: 4px;
+  --sp-1-5: 6px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+
+  /* ---- shape ---- */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 8px;
+  --radius-pill: 999px;
+
+  /* ---- layout ---- */
+  --titlebar-h: 36px; /* top row = tab bar; matches the sidebar header */
+  --statusbar-h: 24px;
+  --sidebar-w: 264px;
+  --control-h: 28px;     /* buttons, inputs, menu items */
+  --control-h-sm: 24px;
+
+  /* ---- stacking ---- */
+  --z-sticky: 10;
+  --z-drawer: 50;
+  --z-popover: 90;       /* menus, quick-picks */
+  --z-dialog: 100;
+  --z-toast: 110;
+
+  /* ---- motion ---- */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur: 120ms;
+  --dur-enter: 150ms;
+
+  /* ================= light (VS Code Light Modern) ================= */
+  --surface-0: #f0f0f0;
+  --surface-1: #f8f8f8;
+  --surface-2: #ffffff;
+  --editor-bg: #ffffff;
+  --border: #e5e5e5;
+  --border-strong: #d1d1d1;
+  --text: #1f1f1f;
+  --text-muted: #5c5c5c;
+  --text-faint: #858585;
+  --hover: rgba(0, 0, 0, 0.045);
+  --active: rgba(0, 0, 0, 0.075);
+  --accent: #005fb8;
+  --accent-hover: #0258a8;
+  --accent-fg: #005fb8;          /* accent used as text/icon color */
+  --accent-soft: rgba(0, 95, 184, 0.1);
+  --accent-text: #ffffff;        /* text on an --accent / --danger-fill background */
+  --ok: #1a7f37;
+  --warn: #9a6700;
+  --danger: #cd2b31;
+  --danger-soft: rgba(205, 43, 49, 0.1);
+  --danger-fill: #c4262c;
+  --danger-fill-hover: #ad1f25;
+  --focus-color: #005fb8;
+  --focus-ring: 0 0 0 2px var(--focus-color);
+  --scrim: rgba(20, 20, 20, 0.32);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-pop: 0 10px 28px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.18), 0 4px 12px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(0, 0, 0, 0.1);
+  --input-bg: #ffffff;
+  --input-border: #d1d1d1;
+  --btn-bg: #ffffff;
+  --btn-bg-hover: #f2f2f2;
+  --btn-border: #d1d1d1;
+  --kbd-bg: rgba(0, 0, 0, 0.04);
+  --kbd-border: rgba(0, 0, 0, 0.12);
+  --badge-bg: rgba(0, 0, 0, 0.06);
+  --badge-fg: #5c5c5c;
+  --scrollbar: rgba(0, 0, 0, 0.2);
+  --scrollbar-hover: rgba(0, 0, 0, 0.34);
+
+  /* editor canvas */
+  --editor-fg: #1f1f1f;
+  --editor-gutter-fg: #8f8f8f;
+  --editor-gutter-active-fg: #1f1f1f;
+  --editor-line-active: rgba(0, 0, 0, 0.035);
+  --editor-cursor: #1f1f1f;
+  --editor-selection: #add6ff;
+  --editor-selection-inactive: #e5ebf1;
+  --editor-selection-match: rgba(173, 214, 255, 0.55);
+  --editor-find-match: rgba(234, 92, 0, 0.22);
+  --editor-find-current: rgba(234, 160, 0, 0.55);
+  --editor-bracket-bg: rgba(0, 0, 0, 0.06);
+  --editor-bracket-border: rgba(0, 0, 0, 0.24);
+  --editor-error-bg: rgba(205, 43, 49, 0.12);    /* the error range */
+  --editor-error-line: rgba(205, 43, 49, 0.045); /* the whole erroring line */
+
+  /* syntax (Light Modern token colors, keyword blue softened) */
+  --syn-keyword: #0f2fd6;
+  --syn-control: #af00db;
+  --syn-string: #a31515;
+  --syn-number: #098658;
+  --syn-comment: #008000;
+  --syn-function: #795e26;
+  --syn-type: #267f99;
+  --syn-variable: #001080;
+  --syn-property: #0451a5;
+  --syn-constant: #0070c1;
+  --syn-regexp: #811f3f;
+  --syn-escape: #c21f1f;
+  --syn-tag: #800000;
+  --syn-attribute: #c50f1f;
+  --syn-operator: #1f1f1f;
+  --syn-punctuation: #3b3b3b;
+  --syn-annotation: #795e26;
+  --syn-heading: #800000;
+  --syn-link: #005fb8;
+  --syn-invalid: #cd2b31;
+
+  color-scheme: light;
+}
+
+/* ================= dark (VS Code Dark Modern / Cursor) ================= */
+:root[data-theme="dark"] {
+  --surface-0: #141414;
+  --surface-1: #181818;
+  --surface-2: #252525;
+  --editor-bg: #1f1f1f;
+  --border: #2b2b2b;
+  --border-strong: #3c3c3c;
+  --text: #cccccc;
+  --text-muted: #9d9d9d;
+  --text-faint: #737373;
+  --hover: rgba(255, 255, 255, 0.055);
+  --active: rgba(255, 255, 255, 0.09);
+  --accent: #0078d4;
+  --accent-hover: #026ec1;
+  --accent-fg: #4daafc;
+  --accent-soft: rgba(0, 120, 212, 0.2);
+  --accent-text: #ffffff;
+  --ok: #73c991;
+  --warn: #e2c08d;
+  --danger: #f35d5d;
+  --danger-soft: rgba(243, 93, 93, 0.16);
+  --danger-fill: #c42b2b;
+  --danger-fill-hover: #d23636;
+  --focus-color: #0078d4;
+  --scrim: rgba(0, 0, 0, 0.55);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-pop: 0 12px 32px rgba(0, 0, 0, 0.5), 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-strong);
+  --shadow-lg: 0 24px 64px rgba(0, 0, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--border-strong);
+  --input-bg: #212121;
+  --input-border: #353535;
+  --btn-bg: #2e2e2e;
+  --btn-bg-hover: #383838;
+  --btn-border: #3c3c3c;
+  --kbd-bg: rgba(255, 255, 255, 0.06);
+  --kbd-border: rgba(255, 255, 255, 0.1);
+  --badge-bg: rgba(255, 255, 255, 0.08);
+  --badge-fg: #9d9d9d;
+  --scrollbar: rgba(255, 255, 255, 0.14);
+  --scrollbar-hover: rgba(255, 255, 255, 0.26);
+
+  --editor-fg: #d4d4d4;
+  --editor-gutter-fg: #6e6e6e;
+  --editor-gutter-active-fg: #cccccc;
+  --editor-line-active: rgba(255, 255, 255, 0.04);
+  --editor-cursor: #e8e8e8;
+  --editor-selection: #264f78;
+  --editor-selection-inactive: #3a3d41;
+  --editor-selection-match: rgba(173, 214, 255, 0.13);
+  --editor-find-match: rgba(234, 92, 0, 0.33);
+  --editor-find-current: rgba(158, 106, 3, 0.9);
+  --editor-bracket-bg: rgba(255, 255, 255, 0.08);
+  --editor-bracket-border: rgba(255, 255, 255, 0.3);
+  --editor-error-bg: rgba(243, 93, 93, 0.22);
+  --editor-error-line: rgba(243, 93, 93, 0.07);
+
+  /* syntax (Dark Modern token colors) */
+  --syn-keyword: #569cd6;
+  --syn-control: #c586c0;
+  --syn-string: #ce9178;
+  --syn-number: #b5cea8;
+  --syn-comment: #6a9955;
+  --syn-function: #dcdcaa;
+  --syn-type: #4ec9b0;
+  --syn-variable: #9cdcfe;
+  --syn-property: #9cdcfe;
+  --syn-constant: #4fc1ff;
+  --syn-regexp: #d16969;
+  --syn-escape: #d7ba7d;
+  --syn-tag: #569cd6;
+  --syn-attribute: #9cdcfe;
+  --syn-operator: #d4d4d4;
+  --syn-punctuation: #c8c8c8;
+  --syn-annotation: #dcdcaa;
+  --syn-heading: #569cd6;
+  --syn-link: #4daafc;
+  --syn-invalid: #f14c4c;
+
+  color-scheme: dark;
+}
+
+/* Phones: a touch smaller code so more of each line fits (14px x 1.5 = 21px). */
+@media (max-width: 720px) {
+  :root { --fs-code: 14px; --lh-code: 1.5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur: 0ms; --dur-enter: 0ms; }
+}

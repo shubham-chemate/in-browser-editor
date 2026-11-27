@@ -1,0 +1,184 @@
+/* Language quick-pick popover (appended to <body>, so classes are lp-prefixed).
+   See docs/ui-plan.md §4.2. Tokens only; the badge color comes from languageMeta. */
+
+/* Language badge, shared by the picker rows and the title bar pill.
+   The color is mixed toward --text so it stays readable in both themes. */
+.lp-badge {
+  --lang: var(--text-faint);
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  min-width: 30px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--lang) 12%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--lang) 16%, transparent);
+  color: color-mix(in srgb, var(--lang) 70%, var(--text));
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+/* Light backgrounds need darker badge text (e.g. JSON's yellow). */
+:root:not([data-theme="dark"]) .lp-badge {
+  background: color-mix(in srgb, var(--lang) 14%, transparent);
+  color: color-mix(in srgb, var(--lang) 55%, var(--text));
+}
+
+.lp-pop {
+  position: fixed;
+  z-index: 95;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  box-shadow: var(--shadow-pop);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: var(--fs-13);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.lp-pop[data-placement="above"] { transform: translateY(4px); }
+.lp-pop.is-open { opacity: 1; transform: none; }
+
+/* search */
+.lp-field {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex: none;
+  height: 40px;
+  padding: 0 var(--sp-3);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-faint);
+}
+.lp-field:focus-within { color: var(--text-muted); }
+.lp-field .icon { flex: none; }
+.lp-input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text);
+  font-size: var(--fs-13);
+}
+.lp-input::placeholder { color: var(--text-faint); }
+
+/* list */
+.lp-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--sp-1) var(--sp-1);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+.lp-list::-webkit-scrollbar { width: 8px; }
+.lp-list::-webkit-scrollbar-thumb { border: 2px solid transparent; border-radius: 8px; background: var(--border-strong) padding-box; }
+
+.lp-group-label {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--sp-2) var(--sp-2) var(--sp-1);
+  background: var(--surface-2);
+  color: var(--text-faint);
+  font-size: var(--fs-11);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  user-select: none;
+}
+.lp-group + .lp-group { margin-top: var(--sp-1); }
+
+.lp-option {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 28px;
+  padding: 0 var(--sp-2) 0 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  user-select: none;
+}
+.lp-option[aria-selected="true"] { background: var(--active); }
+.lp-option .lp-badge { width: 38px; padding: 0 2px; }
+.lp-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lp-match { color: var(--accent-fg); font-weight: 600; }
+.lp-tag {
+  flex: none;
+  color: var(--text-faint);
+  font-size: var(--fs-11);
+  white-space: nowrap;
+}
+.lp-option[aria-selected="true"] .lp-tag { color: var(--text-muted); }
+.lp-check {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  color: var(--accent-fg);
+}
+
+/* empty */
+.lp-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-1);
+  padding: var(--sp-4) var(--sp-3) 20px;
+  text-align: center;
+}
+.lp-empty-title { max-width: 100%; overflow: hidden; color: var(--text-muted); text-overflow: ellipsis; white-space: nowrap; }
+.lp-empty-hint { color: var(--text-faint); font-size: var(--fs-12); line-height: 1.4; }
+
+/* footer: keyboard hints */
+.lp-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: none;
+  height: 28px;
+  padding: 0 var(--sp-3);
+  border-top: 1px solid var(--border);
+  color: var(--text-faint);
+  font-size: var(--fs-11);
+  white-space: nowrap;
+  user-select: none;
+}
+.lp-footer span { display: inline-flex; align-items: center; gap: 2px; }
+.lp-footer kbd {
+  display: inline-grid;
+  place-items: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 3px;
+  border-radius: var(--radius-sm);
+  background: var(--hover);
+  color: var(--text-muted);
+  font-family: var(--font-ui);
+  font-size: var(--fs-11);
+  line-height: 1;
+}
+.lp-footer span + span:not(.lp-footer-hint) { margin-left: 0; }
+.lp-footer-hint { margin-left: auto; }
+
+@media (max-width: 420px) {
+  .lp-footer span:nth-child(3) { display: none; }
+}

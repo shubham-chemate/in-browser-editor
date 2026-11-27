@@ -1,0 +1,140 @@
+/* Status bar (docs/ui-plan.md §4.3). Neutral, quiet, 24px, zero layout shift. */
+
+.statusbar {
+  /* A "quiet" text tier between muted and faint that still passes AA on --surface-1. */
+  --st-quiet: color-mix(in srgb, var(--text-muted) 72%, var(--text-faint));
+
+  container: statusbar / inline-size;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: var(--statusbar-h);
+  padding: 0 var(--sp-1);
+  overflow: hidden;
+  background: var(--surface-1);
+  border-top: 1px solid var(--border);
+  font-family: var(--font-ui);
+  font-size: var(--fs-12);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-muted);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.statusbar .st-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 100%;
+  min-width: 0;
+}
+.statusbar .st-left { flex: 0 1 auto; overflow: hidden; }
+.statusbar .st-right { flex: none; margin-left: auto; }
+
+/* ---- segments ------------------------------------------------------------- */
+.statusbar .st-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex: none;
+  height: 20px;
+  margin: 0;
+  padding: 0 6px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+  white-space: nowrap;
+  transition: background-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.statusbar .st-item[hidden],
+.statusbar [hidden] { display: none !important; }
+
+.statusbar button.st-item { cursor: pointer; }
+.statusbar button.st-item:hover { background: var(--hover); color: var(--text); }
+.statusbar button.st-item:active { background: var(--active); }
+.statusbar button.st-item:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+.statusbar .icon { display: block; flex: none; width: 14px; height: 14px; }
+.statusbar .st-ico { display: inline-flex; align-items: center; justify-content: center; flex: none; width: 14px; height: 14px; }
+.statusbar .st-label,
+.statusbar .st-count { display: block; }
+
+/* ---- problems ------------------------------------------------------------- */
+.statusbar .st-problems { color: var(--st-quiet); }
+.statusbar .st-problems .st-count { min-width: 1ch; }
+.statusbar .st-problems[data-state="error"] { color: var(--danger); }
+.statusbar .st-problems[data-state="error"]:hover { color: var(--danger); background: var(--danger-soft); }
+
+/* ---- check mode (info only) ----------------------------------------------- */
+.statusbar .st-check { color: var(--st-quiet); cursor: default; }
+.statusbar .st-check .icon { opacity: 0.85; }
+/* "Highlight only" recedes via its icon; the label keeps AA contrast. */
+.statusbar .st-check[data-state="highlight"] .icon { color: var(--text-faint); opacity: 1; }
+
+/* ---- fatal ---------------------------------------------------------------- */
+.statusbar .st-fatal { color: var(--danger); }
+.statusbar .st-fatal:hover { color: var(--danger); background: var(--danger-soft); }
+
+/* ---- save state ----------------------------------------------------------- */
+.statusbar .st-save {
+  /* Fits "Saved", "Unsaved" and "Saving…" so switching between them never resizes. */
+  min-width: 80px;
+  justify-content: flex-end;
+  color: var(--st-quiet);
+}
+.statusbar .st-save[data-state="saved"] .icon { color: var(--text-faint); }
+.statusbar .st-save[data-state="unsaved"] { color: var(--text-muted); }
+.statusbar .st-dot-warn {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--warn);
+}
+.statusbar .st-save[data-state="saving"] .icon { animation: st-spin 900ms linear infinite; }
+.statusbar .st-save[data-state="error"] { color: var(--danger); }
+.statusbar .st-save[data-state="error"]:hover { color: var(--danger); background: var(--danger-soft); }
+
+@keyframes st-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  .statusbar .st-save[data-state="saving"] .icon { animation: none; }
+  .statusbar .st-item { transition: none; }
+}
+
+/* ---- cursor --------------------------------------------------------------- */
+/* Reserved widths: "Ln 99, Col 120", and with a selection "… (999 selected)".
+   Moving the cursor or growing a selection never moves the neighbors. */
+.statusbar .st-cursor-text { display: block; min-width: 79px; text-align: left; }
+.statusbar .st-cursor.has-sel .st-cursor-text { min-width: 160px; }
+.statusbar .st-cursor .st-short { display: none; }
+.statusbar .st-cursor .st-sel { color: var(--st-quiet); white-space: pre; }
+
+/* ---- indent (info only) --------------------------------------------------- */
+.statusbar .st-indent { color: var(--st-quiet); cursor: default; }
+
+/* ---- language ------------------------------------------------------------- */
+.statusbar .st-lang { gap: 6px; }
+.statusbar .st-lang-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--lang-color, var(--text-faint));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 14%, transparent);
+}
+
+/* ---- narrow widths -------------------------------------------------------- */
+@container statusbar (max-width: 720px) {
+  .statusbar .st-indent { display: none; }
+  .statusbar .st-check .st-label { display: none; }
+}
+@container statusbar (max-width: 420px) {
+  .statusbar .st-cursor .st-long { display: none; }
+  .statusbar .st-cursor .st-short { display: block; }
+  .statusbar .st-cursor-text { min-width: 38px; }
+  .statusbar .st-cursor.has-sel .st-cursor-text { min-width: 72px; }
+  .statusbar .st-save { min-width: 0; }
+}
